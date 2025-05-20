@@ -7,8 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Enhanced
+- Improved interrupt functionality to more reliably stop Claude when thinking
+- Added ESC key sending to interrupt functionality for more consistent stopping behavior
+
+## [0.5.0] - 2025-05-19
+
 ### Added
 - New `split_ratio` config option to replace `height_ratio` for better handling of both horizontal and vertical splits
+- Added interrupt feature to send SIGINT/Ctrl+C directly to Claude Code process
+- New `interrupt` keymap option (default: `<C-c>`) to interrupt Claude Code when Neovim captures Esc key
 
 ### Fixed
 - Fixed vertical split behavior when the window position is set to a vertical split command

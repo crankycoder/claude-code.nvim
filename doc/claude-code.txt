@@ -128,7 +128,10 @@ default configuration:
           continue = "<leader>cC", -- Normal mode keymap for Claude Code with continue flag
           verbose = "<leader>cV",  -- Normal mode keymap for Claude Code with verbose flag
         },
-      }
+      },
+      interrupt = "<C-c>",      -- Keymap for interrupting Claude Code in terminal
+      window_navigation = true,
+      scrolling = true,
     }
   })
 <
@@ -167,6 +170,7 @@ Variant mode mappings (if configured):
 
 Additionally, when in the Claude Code terminal:
 
+  <C-c>        Interrupt Claude Code (send SIGINT/Ctrl-C to the process)
   <C-h>        Move to the window on the left
   <C-j>        Move to the window below
   <C-k>        Move to the window above
@@ -176,6 +180,11 @@ Additionally, when in the Claude Code terminal:
 
 Note: After scrolling with <C-f> or <C-b>, you'll need to press the 'i' key
 to re-enter insert mode so you can continue typing to Claude Code.
+
+The interrupt keymap (<C-c> by default) is a special keymap that sends both ESC and
+interrupt signals directly to the Claude Code process, which is especially useful
+when you need to stop Claude while it's thinking or generating. This improved
+interrupt mechanism works reliably even when Neovim has captured the Escape key.
 
 You can customize these mappings in the configuration.
 

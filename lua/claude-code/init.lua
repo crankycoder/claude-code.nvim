@@ -44,6 +44,12 @@ function M.force_insert_mode()
   terminal.force_insert_mode(M, M.config)
 end
 
+--- Send an interrupt signal (CTRL+C) to the Claude Code process
+--- This is a public function used in keymaps
+function M.interrupt()
+  terminal.interrupt(M)
+end
+
 --- Toggle the Claude Code terminal window
 --- This is a public function used by commands
 function M.toggle()

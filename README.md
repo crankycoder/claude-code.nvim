@@ -8,7 +8,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/greggh/claude-code.nvim/ci.yml?branch=main&style=flat-square&logo=github)](https://github.com/greggh/claude-code.nvim/actions/workflows/ci.yml)
 [![Neovim Version](https://img.shields.io/badge/Neovim-0.7%2B-blueviolet?style=flat-square&logo=neovim)](https://github.com/neovim/neovim)
 [![Tests](https://img.shields.io/badge/Tests-44%20passing-success?style=flat-square&logo=github-actions)](https://github.com/greggh/claude-code.nvim/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/Version-0.4.2-blue?style=flat-square)](https://github.com/greggh/claude-code.nvim/releases/tag/v0.4.2)
+[![Version](https://img.shields.io/badge/Version-0.5.0-blue?style=flat-square)](https://github.com/greggh/claude-code.nvim/releases/tag/v0.5.0)
 [![Discussions](https://img.shields.io/github/discussions/greggh/claude-code.nvim?style=flat-square&logo=github)](https://github.com/greggh/claude-code.nvim/discussions)
 
 *A seamless integration between [Claude Code](https://github.com/anthropics/claude-code) AI assistant and Neovim*
@@ -134,6 +134,7 @@ require("claude-code").setup({
         verbose = "<leader>cV",  -- Normal mode keymap for Claude Code with verbose flag
       },
     },
+    interrupt = "<C-c>",      -- Keymap for interrupting Claude Code in terminal, false to disable
     window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
     scrolling = true,         -- Enable scrolling keymaps (<C-f/b>) for page up/down
   }
@@ -188,6 +189,7 @@ Variant mode mappings (if configured):
 
 Additionally, when in the Claude Code terminal:
 
+- `<C-c>` - Interrupt Claude Code process (send SIGINT/Ctrl-C signal)
 - `<C-h>` - Move to the window on the left
 - `<C-j>` - Move to the window below
 - `<C-k>` - Move to the window above
@@ -196,6 +198,8 @@ Additionally, when in the Claude Code terminal:
 - `<C-b>` - Scroll full-page up
 
 Note: After scrolling with `<C-f>` or `<C-b>`, you'll need to press the `i` key to re-enter insert mode so you can continue typing to Claude Code.
+
+The interrupt keymap (`<C-c>` by default) sends both ESC and SIGINT signals directly to the Claude Code process, allowing you to reliably stop Claude when it's thinking or generating content, even when Neovim has captured the Escape key.
 
 When Claude Code modifies files that are open in Neovim, they'll be automatically reloaded.
 

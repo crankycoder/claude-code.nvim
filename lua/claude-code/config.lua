@@ -100,6 +100,7 @@ M.default_config = {
         verbose = '<leader>cV', -- Normal mode keymap for Claude Code with verbose flag
       },
     },
+    interrupt = '<C-c>', -- Terminal mode keymap for interrupting Claude Code
     window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
     scrolling = true, -- Enable scrolling keymaps (<C-f/b>) for page up/down
   },
@@ -232,6 +233,10 @@ local function validate_config(config)
     end
   end
 
+  if not (config.keymaps.interrupt == false or type(config.keymaps.interrupt) == 'string') then
+    return false, 'keymaps.interrupt must be a string or false'
+  end
+  
   if type(config.keymaps.window_navigation) ~= 'boolean' then
     return false, 'keymaps.window_navigation must be a boolean'
   end

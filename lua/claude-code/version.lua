@@ -14,8 +14,8 @@ local M = {}
 
 -- Individual version components
 M.major = 0
-M.minor = 4
-M.patch = 2
+M.minor = 5
+M.patch = 0
 
 -- Combined semantic version
 M.version = string.format('%d.%d.%d', M.major, M.minor, M.patch)

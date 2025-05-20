@@ -10,9 +10,11 @@ local M = {}
 -- @table ClaudeCodeTerminal
 -- @field bufnr number|nil Buffer number of the Claude Code terminal
 -- @field saved_updatetime number|nil Original updatetime before Claude Code was opened
+-- @field job_id number|nil Job ID of the terminal process
 M.terminal = {
   bufnr = nil,
   saved_updatetime = nil,
+  job_id = nil,
 }
 
 --- Create a split window according to the specified position configuration
@@ -63,6 +65,32 @@ function M.force_insert_mode(claude_code, config)
       vim.schedule(function()
         vim.cmd 'silent! startinsert'
       end)
+    end
+  end
+end
+
+--- Send an interrupt signal to the Claude Code process to stop thinking
+--- Uses multiple approaches to ensure Claude stops processing
+--- @param claude_code table The main plugin module
+function M.interrupt(claude_code)
+  local bufnr = claude_code.claude_code.bufnr
+  if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+    -- Get the terminal channel/job ID if we don't already have it
+    if not claude_code.claude_code.job_id then
+      claude_code.claude_code.job_id = vim.api.nvim_buf_get_var(bufnr, 'terminal_job_id')
+    end
+    
+    -- First try: Send ESC key to the terminal (most reliable for interrupting thinking)
+    if claude_code.claude_code.job_id then
+      vim.api.nvim_chan_send(claude_code.claude_code.job_id, "\x1b")
+      
+      -- For better reliability, try both ESC and Ctrl+C with a small delay
+      vim.defer_fn(function()
+        -- Second try: Send CTRL+C character to the terminal
+        if claude_code.claude_code.job_id then
+          vim.api.nvim_chan_send(claude_code.claude_code.job_id, "\x03")
+        end
+      end, 50)
     end
   end
 end
@@ -120,6 +148,9 @@ function M.toggle(claude_code, config, git)
 
     -- Store buffer number for future reference
     claude_code.claude_code.bufnr = vim.fn.bufnr '%'
+    
+    -- Store job ID for future reference
+    claude_code.claude_code.job_id = vim.b.terminal_job_id
 
     -- Automatically enter insert mode in terminal unless configured to start in normal mode
     if config.window.enter_insert and not config.window.start_in_normal_mode then

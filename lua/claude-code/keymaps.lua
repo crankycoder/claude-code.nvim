@@ -106,6 +106,26 @@ function M.setup_terminal_navigation(claude_code, config)
       }
     )
 
+    -- Set up the interrupt keymap
+    if config.keymaps.interrupt then
+      vim.api.nvim_buf_set_keymap(
+        buf,
+        't',
+        config.keymaps.interrupt,
+        [[<cmd>lua require("claude-code").interrupt()<CR>]],
+        { noremap = true, silent = true, desc = 'Interrupt Claude Code process' }
+      )
+      
+      -- Also add the keymap for normal mode
+      vim.api.nvim_buf_set_keymap(
+        buf,
+        'n',
+        config.keymaps.interrupt,
+        [[<cmd>lua require("claude-code").interrupt()<CR>]],
+        { noremap = true, silent = true, desc = 'Interrupt Claude Code process' }
+      )
+    end
+
     -- Window navigation keymaps
     if config.keymaps.window_navigation then
       -- Window navigation keymaps with special handling to force insert mode in the target window
